@@ -22,7 +22,7 @@ import * as tf from '@tensorflow/tfjs';
 export const TEXT_DATA_URLS = {
   'underhood': {
     url:
-      'file://./tweets/underhood.txt',
+      './tweets/underhood.txt',
     needle: 'Underhood'
   },
   'nietzsche': {
@@ -252,6 +252,21 @@ export async function maybeDownload(sourceURL, destPath) {
   return new Promise(async (resolve, reject) => {
     if (!fs.existsSync(destPath) || fs.lstatSync(destPath).size === 0) {
       const localZipFile = fs.createWriteStream(destPath);
+
+      if (sourceURL.includes('tweets')) {
+        const readStream = fs.createReadStream(sourceURL);
+        readStream.on('open', function () {
+          // This just pipes the read stream to the response object (which goes to the client)
+          readStream.pipe(localZipFile);
+
+          localZipFile.on('finish', () => {
+            localZipFile.close(() => resolve());
+          });
+        });
+
+        return;
+      }
+
       console.log(`Downloading file from ${sourceURL} to ${destPath}...`);
       https.get(sourceURL, response => {
         response.pipe(localZipFile);

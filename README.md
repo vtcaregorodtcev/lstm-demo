@@ -1,5 +1,9 @@
 # TensorFlow.js Example: Train LSTM to Generate Text
 
+```bash
+node --experimental-json-modules process.mjs
+```
+
 [See this example live!](https://storage.googleapis.com/tfjs-examples/lstm-text-generation/dist/index.html)
 
 ## Overview
@@ -81,7 +85,7 @@ The example command line above generates a set of model files in the
 load the model and use it to generate text. For example:
 
 ```sh
-yarn gen shakespeare ./my-shakespeare-model/model.json \
+yarn gen underhood ./my-underhood/model.json \
     --genLength 250 \
     --temperature 0.6
 ```
